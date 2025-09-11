@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Daily Reminder</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      background: #f0f9ff;
+      color: #333;
+    }
+
+    header {
+      background: #0284c7;
+      color: white;
+      padding: 25px 0;
+      font-size: 2rem;
+      text-align: center;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 40px auto;
+      padding: 30px 20px;
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      text-align: center;
+      color: #0284c7;
+      margin-bottom: 25px;
+      font-size: 1.7rem;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    input[type="text"], input[type="time"] {
+      padding: 12px 15px;
+      font-size: 1rem;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
+      transition: border 0.3s;
+    }
+
+    input:focus {
+      border: 1px solid #0284c7;
+      outline: none;
+    }
+
+    button {
+      padding: 12px;
+      font-size: 1rem;
+      border-radius: 10px;
+      border: none;
+      background: #16a34a;
+      color: white;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    button:hover {
+      background: #15803d;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      font-size: 1.1rem;
+    }
+
+    th, td {
+      padding: 12px;
+      border-bottom: 1px solid #ddd;
+      text-align: center;
+    }
+
+    th {
+      background: #e0f2fe;
+      color: #0284c7;
+    }
+
+    .highlight {
+      background-color: #fff3cd !important;
+    }
+  </style>
+</head>
+<body>
+  <header>Daily Reminder</header>
+
+  <div class="container">
+    <h2>Manage Your Tasks</h2>
+
+    <div class="form-group">
+      <input type="text" id="taskName" placeholder="Task / Activity Name">
+      <input type="time" id="taskTime">
+      <button onclick="addTask()">Add Task</button>
+    </div>
+
+    <table id="taskTable">
+      <tr>
+        <th>Task</th>
+        <th>Time</th>
+        <th>Status</th>
+      </tr>
+    </table>
+  </div>
+
+  <script>
+    let tasks = [];
+    const alarmSound = new Audio('https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg');
+    const table = document.getElementById('taskTable');
+
+    function renderTable() {
+      table.innerHTML = `
+        <tr>
+          <th>Task</th>
+          <th>Time</th>
+          <th>Status</th>
+        </tr>
+      `;
+
+      tasks.forEach((task, index) => {
+        const row = table.insertRow();
+        row.id = `task-${index}`;
+
+        row.insertCell(0).textContent = task.name;
+        row.insertCell(1).textContent = task.time;
+        row.insertCell(2).innerHTML = `<button onclick="markDone(${index})">Mark Done</button>`;
+      });
+    }
+
+    function addTask() {
+      const name = document.getElementById('taskName').value.trim();
+      const time = document.getElementById('taskTime').value;
+
+      if (!name || !time) {
+        alert("Please enter task name and time!");
+        return;
+      }
+
+      tasks.push({ name, time, alerted: false });
+      renderTable();
+
+      document.getElementById('taskName').value = '';
+      document.getElementById('taskTime').value = '';
+    }
+
+    function markDone(index) {
+      const row = document.getElementById(`task-${index}`);
+      row.cells[2].innerHTML = "✔️ Done";
+      row.classList.remove('highlight');
+      tasks[index].alerted = true;
+    }
+
+    function checkTaskTime() {
+      const now = new Date();
+      const hours = now.getHours().toString().padStart(2, "0");
+      const minutes = now.getMinutes().toString().padStart(2, "0");
+      const currentTime = `${hours}:${minutes}`;
+
+      tasks.forEach((task, index) => {
+        const row = document.getElementById(`task-${index}`);
+
+        if (task.time === currentTime && !task.alerted) {
+          // Highlight row
+          row.classList.add('highlight');
+
+          // Play alarm
+          alarmSound.play();
+
+          // Hindi voice reminder
+          const msg = new SpeechSynthesisUtterance(`समय हो गया है, ${task.name} करने का`);
+          msg.lang = 'hi-IN';
+          window.speechSynthesis.speak(msg);
+
+          task.alerted = true;
+        }
+
+        if (task.time !== currentTime) {
+          row.classList.remove('highlight');
+          task.alerted = false;
+        }
+      });
+    }
+
+    setInterval(checkTaskTime, 10000); // Check every 10 seconds
+  </script>
+</body>
+</html>

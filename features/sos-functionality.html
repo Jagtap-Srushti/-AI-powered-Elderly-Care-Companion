@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SOS Alert</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      background: #f0f9ff;
+      color: #333;
+      text-align: center;
+    }
+
+    header {
+      background: #0284c7;
+      color: white;
+      padding: 25px 0;
+      font-size: 2rem;
+      text-align: center;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+
+    .container {
+      margin: 50px auto;
+      max-width: 400px;
+      background: white;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    }
+
+    #sosButton {
+      background: red;
+      color: white;
+      font-size: 2rem;
+      padding: 30px;
+      border: none;
+      border-radius: 50%;
+      width: 150px;
+      height: 150px;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    #sosButton:hover {
+      transform: scale(1.1);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    }
+
+    #status {
+      margin-top: 20px;
+      font-size: 1.2rem;
+      color: #0284c7;
+    }
+  </style>
+</head>
+<body>
+  <header>SOS Alert</header>
+
+  <div class="container">
+    <p>Press the SOS button in case of emergency.</p>
+    <button id="sosButton" onclick="triggerSOS()">SOS</button>
+    <p id="status">Last SOS: None</p>
+  </div>
+
+  <script>
+    const sosButton = document.getElementById('sosButton');
+    const statusText = document.getElementById('status');
+
+    function triggerSOS() {
+      const confirmSOS = confirm("Are you sure you want to send an SOS alert?");
+      if (!confirmSOS) return;
+
+      // Play alarm sound
+      const alarm = new Audio('https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg');
+      alarm.play();
+
+      // Voice alert in Hindi
+      const msg = new SpeechSynthesisUtterance("आपातकालीन स्थिति! तुरंत सहायता की आवश्यकता है!");
+      msg.lang = 'hi-IN';
+      window.speechSynthesis.speak(msg);
+
+      // Get location
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const latitude = position.coords.latitude.toFixed(6);
+            const longitude = position.coords.longitude.toFixed(6);
+            const locationMsg = `Location: Latitude ${latitude}, Longitude ${longitude}`;
+            console.log(locationMsg);
+
+            // Update status
+            const now = new Date();
+            statusText.textContent = `Last SOS: Sent at ${now.toLocaleTimeString()} | ${locationMsg}`;
+          },
+          (error) => {
+            console.error(error);
+            const now = new Date();
+            statusText.textContent = `Last SOS: Sent at ${now.toLocaleTimeString()} | Location not available`;
+          }
+        );
+      } else {
+        alert("Geolocation not supported by your browser.");
+      }
+
+      // Placeholder: Here you can integrate SMS/WhatsApp/Email API to notify caregivers
+    }
+  </script>
+</body>
+</html>

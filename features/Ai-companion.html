@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Companion</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      background: #f0f9ff;
+      color: #333;
+    }
+
+    header {
+      background: #0284c7;
+      color: white;
+      padding: 25px 0;
+      font-size: 2rem;
+      text-align: center;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+
+    .container {
+      max-width: 700px;
+      margin: 40px auto;
+      padding: 20px;
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+      height: 80vh;
+    }
+
+    .chat-window {
+      flex: 1;
+      padding: 15px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      overflow-y: auto;
+      margin-bottom: 15px;
+      background: #f9f9f9;
+    }
+
+    .chat-message {
+      margin: 10px 0;
+      padding: 12px 15px;
+      border-radius: 12px;
+      max-width: 75%;
+      font-size: 1.1rem;
+    }
+
+    .user-msg {
+      background: #16a34a;
+      color: white;
+      align-self: flex-end;
+    }
+
+    .ai-msg {
+      background: #e0f2fe;
+      color: #0284c7;
+      align-self: flex-start;
+    }
+
+    .input-group {
+      display: flex;
+      gap: 10px;
+    }
+
+    .input-group input {
+      flex: 1;
+      padding: 12px 15px;
+      font-size: 1rem;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+    }
+
+    .input-group button {
+      padding: 12px 20px;
+      font-size: 1rem;
+      border-radius: 10px;
+      border: none;
+      background: #0284c7;
+      color: white;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .input-group button:hover {
+      background: #0369a1;
+    }
+
+    .preset-buttons {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 15px;
+      flex-wrap: wrap;
+    }
+
+    .preset-buttons button {
+      background: #16a34a;
+      color: white;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 0.95rem;
+      transition: 0.3s;
+    }
+
+    .preset-buttons button:hover {
+      background: #15803d;
+    }
+  </style>
+</head>
+<body>
+  <header>AI Companion</header>
+
+  <div class="container">
+    <div class="preset-buttons">
+      <button onclick="sendPreset('How am I feeling today?')">How am I feeling today?</button>
+      <button onclick="sendPreset('Tell me a joke')">Tell me a joke</button>
+      <button onclick="sendPreset('Relaxation exercise')">Relaxation exercise</button>
+      <button onclick="sendPreset('Give me health tips')">Give me health tips</button>
+    </div>
+
+    <div class="chat-window" id="chatWindow"></div>
+
+    <div class="input-group">
+      <input type="text" id="userInput" placeholder="Type your message here">
+      <button onclick="sendMessage()">Send</button>
+    </div>
+  </div>
+
+  <script>
+    const chatWindow = document.getElementById('chatWindow');
+
+    function addMessage(message, sender) {
+      const msgDiv = document.createElement('div');
+      msgDiv.classList.add('chat-message');
+      msgDiv.classList.add(sender === 'user' ? 'user-msg' : 'ai-msg');
+      msgDiv.textContent = message;
+      chatWindow.appendChild(msgDiv);
+      chatWindow.scrollTop = chatWindow.scrollHeight;
+
+      // Voice output for AI messages in Hindi
+      if (sender === 'ai') {
+        const speech = new SpeechSynthesisUtterance(message);
+        speech.lang = 'hi-IN';
+        window.speechSynthesis.speak(speech);
+      }
+    }
+
+    function sendMessage() {
+      const input = document.getElementById('userInput');
+      const text = input.value.trim();
+      if (!text) return;
+
+      addMessage(text, 'user');
+      input.value = '';
+
+      // Simulate AI response
+      setTimeout(() => {
+        const aiResponse = generateAIResponse(text);
+        addMessage(aiResponse, 'ai');
+      }, 500);
+    }
+
+    function sendPreset(text) {
+      addMessage(text, 'user');
+      setTimeout(() => {
+        const aiResponse = generateAIResponse(text);
+        addMessage(aiResponse, 'ai');
+      }, 500);
+    }
+
+    function generateAIResponse(userText) {
+      // Pre-defined simple AI responses
+      userText = userText.toLowerCase();
+      if (userText.includes('joke')) {
+        return 'एक मजेदार चुटकुला: बिल्लियाँ इंटरनेट क्यों पसंद करती हैं? क्योंकि उन्हें माउस मिल जाता है!';
+      } else if (userText.includes('relax')) {
+        return 'धीरे-धीरे गहरी साँस लें और आंखें बंद करें, 5 मिनट के लिए ध्यान लगाएँ।';
+      } else if (userText.includes('health')) {
+        return 'सुनिश्चित करें कि आप पर्याप्त पानी पिएँ और रोज़ाना हल्का व्यायाम करें।';
+      } else if (userText.includes('feeling')) {
+        return 'आज आपका मूड अच्छा दिख रहा है! मुस्कुराएँ और हल्की सैर करें।';
+      } else {
+        return 'मुझे समझ नहीं आया, कृपया पुनः प्रयास करें।';
+      }
+    }
+  </script>
+</body>
+</html>
