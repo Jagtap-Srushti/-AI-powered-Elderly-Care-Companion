@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About - Medicine Reminder</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #dbeafe, #ecfdf5);
+      color: #333;
+    }
+
+    header {
+      background: linear-gradient(90deg, #0284c7, #0369a1);
+      padding: 30px;
+      text-align: center;
+      color: white;
+      font-size: 2rem;
+      font-weight: bold;
+      letter-spacing: 1px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 50px auto;
+      padding: 35px;
+      background: #ffffff;
+      border-radius: 18px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from {opacity: 0; transform: translateY(25px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+
+    h2 {
+      text-align: center;
+      color: #0284c7;
+      margin-bottom: 25px;
+      font-size: 2.2rem;
+    }
+
+    p {
+      font-size: 1.2rem;
+      line-height: 1.9;
+      color: #444;
+      margin-bottom: 25px;
+      text-align: justify;
+    }
+
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 25px;
+      margin-top: 35px;
+    }
+
+    .feature-card {
+      background: linear-gradient(135deg, #f9fafb, #f0f9ff);
+      padding: 25px;
+      border-radius: 14px;
+      box-shadow: 0 6px 14px rgba(0,0,0,0.08);
+      text-align: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.12);
+    }
+
+    .feature-card img {
+      width: 75px;
+      margin-bottom: 18px;
+      transition: transform 0.3s ease;
+    }
+
+    .feature-card:hover img {
+      transform: scale(1.15) rotate(6deg);
+    }
+
+    .feature-card h3 {
+      color: #0369a1;
+      font-size: 1.4rem;
+      margin-bottom: 12px;
+    }
+
+    footer {
+      margin-top: 50px;
+      text-align: center;
+      padding: 20px;
+      background: #0284c7;
+      font-size: 1.1rem;
+      color: white;
+      letter-spacing: 0.5px;
+      box-shadow: 0 -4px 12px rgba(0,0,0,0.2);
+    }
+
+    footer span {
+      font-size: 1.3rem;
+      color: #fef9c3;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    About Medicine Reminder App
+  </header>
+
+  <div class="container">
+    <h2>Making Life Easier for Elderly People 💙</h2>
+    <p>
+      Our Medicine Reminder App is designed with love and care for elderly people and their families. 
+      We understand how important it is to take medicines on time and stay healthy.  
+      This app helps by reminding you when to take your medicines, providing SOS emergency support, 
+      and keeping everything simple and easy to use.  
+    </p>
+
+    <p>
+      Our mission is to support seniors in living a healthy and stress-free life. 
+      With simple features, big fonts, and easy navigation, this app ensures that 
+      even those who are not very familiar with technology can use it comfortably.  
+    </p>
+
+    <div class="features">
+      <div class="feature-card">
+        <img src="https://cdn-icons-png.flaticon.com/512/2966/2966327.png" alt="Medicine Reminder">
+        <h3>Medicine Reminders</h3>
+        <p>Get timely reminders for your medicines so you never miss a dose.</p>
+      </div>
+      <div class="feature-card">
+        <img src="https://cdn-icons-png.flaticon.com/512/483/483947.png" alt="SOS Support">
+        <h3>SOS Emergency</h3>
+        <p>Quickly alert family or doctors in case of emergency.</p>
+      </div>
+      <div class="feature-card">
+        <img src="https://cdn-icons-png.flaticon.com/512/2927/2927347.png" alt="Easy to Use">
+        <h3>Simple & Easy</h3>
+        <p>Designed with large fonts, clear buttons, and simple navigation for seniors.</p>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <span>🌸</span> Caring for you, every step of the way <span>🌸</span>
+  </footer>
+</body>
+</html>
