@@ -299,7 +299,20 @@ body {
 @media (max-width: 768px) {
   /* Mobile */
   body {
-    font-size: 16px; /* slightly smaller font on mobile */
+    font-size: 14px; /* slightly smaller font on mobile */
+  }
+
+  h1, h2, h3 {
+    font-size: 90%; /* scale down headings */
+  }
+
+  p {
+    font-size: 90%; /* scale down paragraphs */
+  }
+  feature-card img {
+    height: 100px; /* make images bigger */
+    width: auto;
+    padding: 12px;
   }
 
   .navbar {
@@ -375,5 +388,24 @@ body {
   }
   .footer .socials a {
     font-size: 1.2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  body {
+    font-size: 12px; /* further reduce font size */
+  }
+
+  h1, h2, h3 {
+    font-size: 85%;
+  }
+
+  p {
+    font-size: 85%;
+  }
+
+  .feature-card img {
+    height: 110px; /* even bigger icons for small devices */
+    padding: 14px;
   }
 }
