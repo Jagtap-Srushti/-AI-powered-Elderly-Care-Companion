@@ -100,7 +100,7 @@ body {
   background: #1d4ed8;
 }
 .hero-image img {
-  max-width: 400px;
+  max-width: 450px;;
   border-radius: 15px;
 }
 
@@ -131,10 +131,7 @@ body {
   transform: translateY(-8px);
   box-shadow: 0 8px 16px rgba(0,0,0,0.2);
 }
-.feature-card img {
-  height: 80px;
-  margin-bottom: 1rem;
-}
+
 .feature-card h4 {
   font-size: 1.2rem;
   color: #2563eb;
@@ -142,9 +139,10 @@ body {
 }
 
 .feature-card img {
-  height: 80px;
+  height: 120px; /* Increased from 80px */
+  width: auto;   /* Keeps aspect ratio */
   margin-bottom: 1rem;
-  padding: 10px;
+  padding: 15px; /* Slightly bigger padding */
   background: #e0f2fe;
   border-radius: 50%;
 }
@@ -273,3 +271,109 @@ body {
 }
 
 
+/* Already existing styles above ... */
+
+/* ========================= */
+/* RESPONSIVE DESIGN SECTION */
+/* ========================= */
+
+@media (max-width: 1024px) {
+  /* Tablets */
+  .hero {
+    flex-direction: column;
+    text-align: center;
+    padding: 3rem 2rem;
+  }
+  .hero-text {
+    max-width: 100%;
+    margin-bottom: 2rem;
+  }
+  .hero-image img {
+    max-width: 70%;
+  }
+  .feature-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  /* Mobile */
+  body {
+    font-size: 16px; /* slightly smaller font on mobile */
+  }
+
+  .navbar {
+    padding: 15px 20px;
+  }
+  .logo {
+    font-size: 26px;
+  }
+  .nav-links {
+    display: none;
+    position: absolute;
+    top: 70px;
+    right: 15px;
+    background: #2563eb;
+    flex-direction: column;
+    border-radius: 10px;
+    padding: 1rem;
+    width: 200px;
+  }
+  .nav-links.active {
+    display: flex;
+  }
+  .nav-links a {
+    font-size: 18px;
+    padding: 10px 0;
+  }
+  .menu-toggle {
+    display: block;
+  }
+
+  .hero {
+    flex-direction: column;
+    text-align: center;
+    padding: 2rem 1rem;
+  }
+  .hero-text h2 {
+    font-size: 2rem;
+  }
+  .hero-text p {
+    font-size: 1rem;
+  }
+  .hero-image img {
+    max-width: 90%;
+    margin-top: 1.5rem;
+  }
+
+  .features {
+    padding: 2rem 1rem;
+  }
+  .feature-grid {
+    grid-template-columns: 1fr;
+  }
+  .feature-card {
+    padding: 1.5rem;
+  }
+  .feature-card img {
+    height: 80px;
+  }
+
+  .testimonials {
+    padding: 3rem 1.5rem;
+  }
+  .testimonial-cards {
+    grid-template-columns: 1fr;
+  }
+  .testimonial-card {
+    padding: 2rem 1.5rem;
+  }
+
+  .footer {
+    padding: 1.5rem;
+    font-size: 0.9rem;
+  }
+  .footer .socials a {
+    font-size: 1.2rem;
+  }
+}
