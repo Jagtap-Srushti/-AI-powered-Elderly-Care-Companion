@@ -292,6 +292,10 @@ body {
   .feature-grid {
     grid-template-columns: repeat(2, 1fr);
   }
+  .feature-card img {
+    height: 150px; /* Even bigger images for small screens */
+    padding: 16px;
+  }
 }
 
 @media (max-width: 768px) {
@@ -366,6 +370,10 @@ body {
   }
   .feature-card {
     padding: 1.5rem;
+  }
+  .feature-card img {
+    height: 150px; /* Even bigger images for small screens */
+    padding: 16px;
   }
 
   .testimonials {
