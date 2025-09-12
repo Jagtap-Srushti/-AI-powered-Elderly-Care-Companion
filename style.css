@@ -139,7 +139,7 @@ body {
 }
 
 .feature-card img {
-  height: 120px; /* Increased from 80px */
+  height: 140px; /* Increased from 80px */
   width: auto;   /* Keeps aspect ratio */
   margin-bottom: 1rem;
   padding: 15px; /* Slightly bigger padding */
@@ -313,7 +313,7 @@ body {
   }
 
   .feature-card img {
-    height: 200px; /* Bigger images for mobile */
+    height: 180px; /* Bigger images for mobile */
     width: auto;
     padding: 14px;
   }
@@ -372,7 +372,7 @@ body {
     padding: 1.5rem;
   }
   .feature-card img {
-    height: 150px; /* Even bigger images for small screens */
+    height: 180px; /* Even bigger images for small screens */
     padding: 16px;
   }
 
@@ -410,7 +410,7 @@ body {
   }
 
   .feature-card img {
-    height: 200px; /* Even bigger images for small screens */
+    height: 180px; /* Even bigger images for small screens */
     padding: 16px;
   }
 
