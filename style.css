@@ -271,8 +271,6 @@ body {
 }
 
 
-/* Already existing styles above ... */
-
 /* ========================= */
 /* RESPONSIVE DESIGN SECTION */
 /* ========================= */
@@ -309,10 +307,11 @@ body {
   p {
     font-size: 90%; /* scale down paragraphs */
   }
-  feature-card img {
-    height: 100px; /* make images bigger */
+
+  .feature-card img {
+    height: 130px; /* Bigger images for mobile */
     width: auto;
-    padding: 12px;
+    padding: 14px;
   }
 
   .navbar {
@@ -368,9 +367,6 @@ body {
   .feature-card {
     padding: 1.5rem;
   }
-  .feature-card img {
-    height: 80px;
-  }
 
   .testimonials {
     padding: 3rem 1.5rem;
@@ -392,6 +388,7 @@ body {
 }
 
 @media (max-width: 480px) {
+  /* Very small screens */
   body {
     font-size: 12px; /* further reduce font size */
   }
@@ -405,7 +402,11 @@ body {
   }
 
   .feature-card img {
-    height: 110px; /* even bigger icons for small devices */
-    padding: 14px;
+    height: 150px; /* Even bigger images for small screens */
+    padding: 16px;
+  }
+
+  .feature-card h4 {
+    font-size: 1.3rem; /* Make titles easier to read */
   }
 }
