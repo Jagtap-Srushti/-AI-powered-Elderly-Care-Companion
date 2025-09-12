@@ -293,7 +293,7 @@ body {
     grid-template-columns: repeat(2, 1fr);
   }
   .feature-card img {
-    height: 150px; /* Even bigger images for small screens */
+    height: 200px; /* Even bigger images for small screens */
     padding: 16px;
   }
 }
@@ -313,7 +313,7 @@ body {
   }
 
   .feature-card img {
-    height: 130px; /* Bigger images for mobile */
+    height: 200px; /* Bigger images for mobile */
     width: auto;
     padding: 14px;
   }
@@ -410,7 +410,7 @@ body {
   }
 
   .feature-card img {
-    height: 150px; /* Even bigger images for small screens */
+    height: 200px; /* Even bigger images for small screens */
     padding: 16px;
   }
 
