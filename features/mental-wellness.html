@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guided Yoga & Meditation</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2&display=swap" rel="stylesheet">
+<style>
+  body {
+    font-family: 'Baloo 2', cursive;
+    margin: 0;
+    background: #e0f7fa;
+    color: #333;
+  }
+
+  header {
+    background: #0288d1;
+    color: white;
+    padding: 25px 0;
+    font-size: 2.2rem;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  }
+
+  .container {
+    max-width: 900px;
+    margin: 30px auto;
+    padding: 20px;
+  }
+
+  h2 {
+    color: #0288d1;
+    font-size: 2rem;
+    text-align: center;
+    margin-bottom: 30px;
+  }
+
+  .exercise-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+  }
+
+  .exercise-card {
+    background: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+
+  .exercise-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 25px rgba(0,0,0,0.2);
+  }
+
+  .exercise-card img {
+    max-width: 100%;
+    border-radius: 15px;
+    margin-bottom: 15px;
+  }
+
+  .exercise-card h3 {
+    font-size: 1.5rem;
+    color: #00796b;
+    margin-bottom: 10px;
+  }
+
+  .instruction-box {
+    margin-top: 30px;
+    padding: 25px;
+    background: #b2ebf2;
+    border-radius: 20px;
+    font-size: 1.5rem;
+    min-height: 140px;
+    text-align: center;
+    box-shadow: inset 0 4px 8px rgba(0,0,0,0.05);
+  }
+
+  footer {
+    text-align: center;
+    padding: 20px;
+    background: #0288d1;
+    color: white;
+    margin-top: 40px;
+    font-size: 1rem;
+  }
+
+  @media(max-width:600px){
+    .exercise-card h3 { font-size: 1.3rem; }
+    .instruction-box { font-size: 1.3rem; padding: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<header>Guided Yoga & Meditation</header>
+
+<div class="container">
+  <h2>Choose Your Exercise</h2>
+
+  <div class="exercise-grid">
+    <div class="exercise-card" onclick="startExercise('tadasana')">
+      <img src="/assets/tadasan.webp" alt="Tadasana">
+      <h3>ताड़ासन (Mountain Pose)</h3>
+    </div>
+
+    <div class="exercise-card" onclick="startExercise('vrikshasana')">
+      <img src="/assets/vruksasana.webp" alt="Vrikshasana">
+      <h3>वृक्षासन (Tree Pose)</h3>
+    </div>
+
+    <div class="exercise-card" onclick="startExercise('shavasana')">
+      <img src="/assets/shavasana.jpg" alt="Shavasana">
+      <h3>शवासन (Relaxation Pose)</h3>
+    </div>
+
+    <div class="exercise-card" onclick="startExercise('pranayama')">
+      <img src="/assets/pranayam.webp" alt="Pranayama">
+      <h3>प्राणायाम (Breathing Exercise)</h3>
+    </div>
+  </div>
+
+  <div class="instruction-box" id="instructionText">
+    Select an exercise to start. Follow the voice instructions.
+  </div>
+</div>
+
+<footer>© 2025 AI Elderly Care</footer>
+
+<script>
+  const exercises = {
+    tadasana: {
+      steps: [
+        "सही स्थिति में खड़े हो जाएँ, पैरों को मिलाएँ।",
+        "हाथों को धीरे-धीरे ऊपर उठाएँ।",
+        "घुटनों को सीधा रखें और धीरे-धीरे साँस लें।",
+        "कुछ सेकंड इसी स्थिति में रहें, फिर हाथ धीरे-धीरे नीचे लाएँ।"
+      ]
+    },
+    vrikshasana: {
+      steps: [
+        "सही स्थिति में खड़े हो जाएँ।",
+        "दाएँ पैर को धीरे-धीरे बाएँ पैर के घुटने पर रखें।",
+        "हाथों को ऊपर उठाएँ और कुछ सेकंड स्थिर रहें।",
+        "धीरे-धीरे पैर नीचे लाएँ और आराम करें।"
+      ]
+    },
+    shavasana: {
+      steps: [
+        "पीठ के बल लेट जाएँ।",
+        "हाथ और पैर शरीर से थोड़ा दूर रखें।",
+        "धीरे-धीरे गहरी साँस लें और पूरी तरह आराम करें।",
+        "5 मिनट के लिए पूरी तरह आराम करें।"
+      ]
+    },
+    pranayama: {
+      steps: [
+        "सही स्थिति में बैठ जाएँ, पीठ सीधी रखें।",
+        "धीरे-धीरे नाक से साँस लें।",
+        "साँस को 4 सेकंड के लिए रोकें।",
+        "धीरे-धीरे मुँह से साँस छोड़ें।",
+        "इसे 5 बार दोहराएँ।"
+      ]
+    }
+  };
+
+  let stepIndex = 0;
+  let currentExercise = null;
+  const instructionElem = document.getElementById("instructionText");
+
+  function speak(text) {
+    const msg = new SpeechSynthesisUtterance(text);
+    msg.lang = 'hi-IN';
+    window.speechSynthesis.speak(msg);
+  }
+
+  function nextStep() {
+    if (!currentExercise) return;
+    if (stepIndex < exercises[currentExercise].steps.length) {
+      const step = exercises[currentExercise].steps[stepIndex];
+      instructionElem.textContent = step;
+      speak(step);
+      stepIndex++;
+      setTimeout(nextStep, 8000); // 8 seconds per step
+    } else {
+      instructionElem.textContent = "अभ्यास समाप्त! अच्छी सेहत के लिए धन्यवाद!";
+      speak("अभ्यास समाप्त! अच्छी सेहत के लिए धन्यवाद!");
+      stepIndex = 0;
+      currentExercise = null;
+    }
+  }
+
+  function startExercise(name) {
+    currentExercise = name;
+    stepIndex = 0;
+    nextStep();
+  }
+</script>
+
+</body>
+</html>
