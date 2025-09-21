@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Family Video Call | ElderlyCare</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: #f3f6fc;
+      color: #333;
+    }
+
+    /* Header */
+    .header {
+      background: #2563eb;
+      color: #fff;
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .header h2 { margin: 0; font-weight: 600; font-size: 20px; }
+    .back-btn {
+      background: #ffcc00;
+      padding: 6px 14px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 600;
+      color: #000;
+      transition: all 0.3s;
+    }
+    .back-btn:hover { background: #ffb700; }
+
+    /* Contact List */
+    .contacts {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+      padding: 25px 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .contact-card {
+      background: #fff;
+      padding: 20px;
+      border-radius: 16px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .contact-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 28px rgba(0,0,0,0.15);
+    }
+    .contact-info {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    .contact-avatar {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #2563eb, #1e40af);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      font-weight: 600;
+    }
+    .contact-name { font-weight: 600; font-size: 18px; }
+
+    .call-btn {
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      color: #fff;
+      padding: 10px 16px;
+      border-radius: 10px;
+      border: none;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.2s, opacity 0.3s;
+    }
+    .call-btn:hover { transform: scale(1.05); opacity: 0.9; }
+
+    /* Video Call Section */
+    .video-section {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 15px;
+    }
+    .video-section h3 {
+      font-size: 20px;
+      margin-bottom: 15px;
+      font-weight: 600;
+      color: #1e40af;
+    }
+
+    .video-container {
+      position: relative;
+      width: 100%;
+      max-width: 900px;
+      background: #000;
+      border-radius: 16px;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      aspect-ratio: 16/9;
+      margin-bottom: 20px;
+    }
+    #remoteVideo {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    #localVideo {
+      position: absolute;
+      width: 150px;
+      height: 120px;
+      bottom: 15px;
+      right: 15px;
+      border-radius: 12px;
+      border: 2px solid #fff;
+      object-fit: cover;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+
+    .video-label {
+      position: absolute;
+      bottom: 8px;
+      left: 10px;
+      background: rgba(0,0,0,0.6);
+      color: white;
+      padding: 4px 8px;
+      font-size: 14px;
+      border-radius: 6px;
+    }
+
+    /* Controls */
+    .controls {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-bottom: 30px;
+    }
+    .controls button {
+      padding: 12px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      color: white;
+      font-weight: 600;
+      transition: all 0.3s;
+    }
+    .controls #startBtn { background: #2563eb; }
+    .controls #startBtn:hover { background: #1d4ed8; }
+    .controls #muteBtn { background: #f59e0b; }
+    .controls #muteBtn:hover { background: #d97706; }
+    .controls #cameraBtn { background: #10b981; }
+    .controls #cameraBtn:hover { background: #059669; }
+    .controls #endBtn { background: #dc2626; }
+    .controls #endBtn:hover { background: #b91c1c; }
+
+    @media (max-width: 768px) {
+      .video-container { aspect-ratio: auto; height: 300px; }
+      #localVideo { width: 120px; height: 90px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="header">
+    <h2>📞 Family Video Call</h2>
+    <a href="../index.html" class="back-btn">⬅ Back</a>
+  </header>
+
+  <!-- Contact List -->
+  <section class="contacts">
+    <div class="contact-card" data-name="Rajesh K.">
+      <div class="contact-info">
+        <div class="contact-avatar">R</div>
+        <div class="contact-name">Rajesh K.</div>
+      </div>
+      <button class="call-btn">Call</button>
+    </div>
+    <div class="contact-card" data-name="Anjali M.">
+      <div class="contact-info">
+        <div class="contact-avatar">A</div>
+        <div class="contact-name">Anjali M.</div>
+      </div>
+      <button class="call-btn">Call</button>
+    </div>
+    <div class="contact-card" data-name="Suresh P.">
+      <div class="contact-info">
+        <div class="contact-avatar">S</div>
+        <div class="contact-name">Suresh P.</div>
+      </div>
+      <button class="call-btn">Call</button>
+    </div>
+  </section>
+
+  <!-- Video Call Section -->
+  <section class="video-section">
+    <h3 id="callTitle"></h3>
+    <div class="video-container">
+      <video id="remoteVideo" autoplay playsinline></video>
+      <video id="localVideo" autoplay playsinline muted></video>
+      <span class="video-label" id="remoteLabel">Companion</span>
+    </div>
+    <div class="controls">
+      <button id="startBtn">▶ Start</button>
+      <button id="muteBtn">🔇 Mute</button>
+      <button id="cameraBtn">📷 Stop Cam</button>
+      <button id="endBtn">❌ End</button>
+    </div>
+  </section>
+
+  <script>
+    const contactCards = document.querySelectorAll(".contact-card");
+    const videoSection = document.querySelector(".video-section");
+    const callTitle = document.getElementById("callTitle");
+    const remoteLabel = document.getElementById("remoteLabel");
+
+    const localVideo = document.getElementById("localVideo");
+    const remoteVideo = document.getElementById("remoteVideo");
+
+    const startBtn = document.getElementById("startBtn");
+    const muteBtn = document.getElementById("muteBtn");
+    const cameraBtn = document.getElementById("cameraBtn");
+    const endBtn = document.getElementById("endBtn");
+
+    let localStream;
+    let audioEnabled = true;
+    let videoEnabled = true;
+
+    // Open video call when a contact is clicked
+    contactCards.forEach(card => {
+      card.querySelector(".call-btn").addEventListener("click", () => {
+        const name = card.dataset.name;
+        callTitle.textContent = `Calling ${name}...`;
+        remoteLabel.textContent = name;
+        videoSection.style.display = "flex";
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    });
+
+    // Start video
+    startBtn.addEventListener("click", async () => {
+      try {
+        localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+        localVideo.srcObject = localStream;
+        remoteVideo.srcObject = localStream; // placeholder for demo
+        callTitle.textContent = callTitle.textContent.replace("Calling", "Connected to");
+      } catch (error) {
+        alert("Error accessing camera/microphone: " + error.message);
+      }
+    });
+
+    // Mute/Unmute
+    muteBtn.addEventListener("click", () => {
+      if (!localStream) return;
+      audioEnabled = !audioEnabled;
+      localStream.getAudioTracks().forEach(track => track.enabled = audioEnabled);
+      muteBtn.textContent = audioEnabled ? "🔇 Mute" : "🔊 Unmute";
+    });
+
+    // Stop/Start Camera
+    cameraBtn.addEventListener("click", () => {
+      if (!localStream) return;
+      videoEnabled = !videoEnabled;
+      localStream.getVideoTracks().forEach(track => track.enabled = videoEnabled);
+      cameraBtn.textContent = videoEnabled ? "📷 Stop Cam" : "📷 Start Cam";
+    });
+
+    // End Call
+    endBtn.addEventListener("click", () => {
+      if (localStream) localStream.getTracks().forEach(track => track.stop());
+      localVideo.srcObject = null;
+      remoteVideo.srcObject = null;
+      videoSection.style.display = "none";
+    });
+  </script>
+</body>
+</html>
