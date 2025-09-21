@@ -1,204 +1,314 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Daily Reminder</title>
-  <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      margin: 0;
-      background: #f0f9ff;
-      color: #333;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Daily Reminder</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #0284c7;
+    --secondary: #16a34a;
+    --bg: #f0f9ff;
+    --card-bg: #ffffff;
+    --text-color: #333;
+    --highlight: #fff3cd;
+    --accent: #2563eb;
+  }
 
-    header {
-      background: #0284c7;
-      color: white;
-      padding: 25px 0;
-      font-size: 2rem;
-      text-align: center;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-    }
+  body {
+    margin: 0;
+    font-family: 'Roboto', sans-serif;
+    background: var(--bg);
+    color: var(--text-color);
+    transition: background 0.3s, color 0.3s;
+  }
 
-    .container {
-      max-width: 600px;
-      margin: 40px auto;
-      padding: 30px 20px;
-      background: white;
-      border-radius: 15px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-    }
+  body.dark {
+    --bg: #1e293b;
+    --card-bg: #334155;
+    --text-color: #f1f5f9;
+  }
 
-    h2 {
-      text-align: center;
-      color: #0284c7;
-      margin-bottom: 25px;
-      font-size: 1.7rem;
-    }
+  header {
+    position: sticky;
+    top: 0;
+    background: var(--primary);
+    color: white;
+    padding: 20px;
+    font-size: 1.8rem;
+    font-weight: 700;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
 
-    .form-group {
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-      margin-bottom: 20px;
-    }
+  header button {
+    background: white;
+    color: var(--primary);
+    border: none;
+    padding: 8px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: 600;
+  }
 
-    input[type="text"], input[type="time"] {
-      padding: 12px 15px;
-      font-size: 1rem;
-      border-radius: 10px;
-      border: 1px solid #ccc;
-      box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
-      transition: border 0.3s;
-    }
+  header button:hover {
+    background: #e0f2fe;
+  }
 
-    input:focus {
-      border: 1px solid #0284c7;
-      outline: none;
-    }
+  .container {
+    max-width: 500px;
+    margin: 30px auto;
+    padding: 20px;
+  }
 
-    button {
-      padding: 12px;
-      font-size: 1rem;
-      border-radius: 10px;
-      border: none;
-      background: #16a34a;
-      color: white;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    }
+  h2 {
+    text-align: center;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 25px;
+  }
 
-    button:hover {
-      background: #15803d;
-      transform: translateY(-2px);
-      box-shadow: 0 6px 12px rgba(0,0,0,0.15);
-    }
+  .add-task {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 20px;
-      font-size: 1.1rem;
-    }
+  .add-task input[type="text"], .add-task input[type="time"] {
+    flex: 1;
+    padding: 12px 15px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+    box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
+    transition: border 0.3s;
+  }
 
-    th, td {
-      padding: 12px;
-      border-bottom: 1px solid #ddd;
-      text-align: center;
-    }
+  .add-task input:focus {
+    border: 1px solid var(--primary);
+    outline: none;
+  }
 
-    th {
-      background: #e0f2fe;
-      color: #0284c7;
-    }
+  .add-task button {
+    background: var(--secondary);
+    border: none;
+    padding: 12px 18px;
+    border-radius: 10px;
+    color: white;
+    cursor: pointer;
+    font-weight: 600;
+    transition: 0.3s;
+  }
 
-    .highlight {
-      background-color: #fff3cd !important;
-    }
-  </style>
+  .add-task button:hover {
+    background: #15803d;
+    transform: translateY(-2px);
+  }
+
+  #taskList {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .task-card {
+    background: var(--card-bg);
+    padding: 15px 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: transform 0.3s;
+  }
+
+  .task-card.highlight {
+    background-color: var(--highlight);
+    animation: pulse 1s infinite;
+  }
+
+  @keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.03); }
+    100% { transform: scale(1); }
+  }
+
+  .task-info {
+    font-size: 1.1rem;
+    font-weight: 500;
+  }
+
+  .task-time {
+    font-weight: 700;
+    color: var(--accent);
+    margin-left: 10px;
+  }
+
+  .task-actions button {
+    background: #dc2626;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 8px;
+    color: white;
+    cursor: pointer;
+    font-weight: 600;
+    transition: 0.3s;
+  }
+
+  .task-actions button:hover {
+    background: #b91c1c;
+  }
+
+  .upcoming {
+    text-align: center;
+    font-weight: 600;
+    color: var(--accent);
+    margin-bottom: 20px;
+  }
+
+  .notification {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: var(--secondary);
+    color: white;
+    padding: 12px 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    display: none;
+    font-weight: 600;
+  }
+</style>
 </head>
 <body>
-  <header>Daily Reminder</header>
 
-  <div class="container">
-    <h2>Manage Your Tasks</h2>
+<header>
+  Daily Reminder
+  <button onclick="toggleDarkMode()">🌙</button>
+</header>
 
-    <div class="form-group">
-      <input type="text" id="taskName" placeholder="Task / Activity Name">
-      <input type="time" id="taskTime">
-      <button onclick="addTask()">Add Task</button>
-    </div>
+<div class="container">
+  <h2>Manage Your Tasks</h2>
 
-    <table id="taskTable">
-      <tr>
-        <th>Task</th>
-        <th>Time</th>
-        <th>Status</th>
-      </tr>
-    </table>
+  <div class="add-task">
+    <input type="text" id="taskName" placeholder="Task / Activity Name">
+    <input type="time" id="taskTime">
+    <button onclick="addTask()">Add</button>
   </div>
 
-  <script>
-    let tasks = [];
-    const alarmSound = new Audio('https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg');
-    const table = document.getElementById('taskTable');
+  <div class="upcoming" id="upcomingReminder"></div>
 
-    function renderTable() {
-      table.innerHTML = `
-        <tr>
-          <th>Task</th>
-          <th>Time</th>
-          <th>Status</th>
-        </tr>
-      `;
+  <div id="taskList"></div>
+</div>
 
-      tasks.forEach((task, index) => {
-        const row = table.insertRow();
-        row.id = `task-${index}`;
+<div class="notification" id="notification"></div>
 
-        row.insertCell(0).textContent = task.name;
-        row.insertCell(1).textContent = task.time;
-        row.insertCell(2).innerHTML = `<button onclick="markDone(${index})">Mark Done</button>`;
-      });
+<script>
+let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+const alarmSound = new Audio('https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg');
+
+function saveTasks() {
+  localStorage.setItem('tasks', JSON.stringify(tasks));
+}
+
+function addTask() {
+  const name = document.getElementById('taskName').value.trim();
+  const time = document.getElementById('taskTime').value;
+  if(!name || !time) { alert("कृपया कार्य और समय दर्ज करें!"); return; }
+
+  tasks.push({name, time, alerted: false});
+  saveTasks();
+  renderList();
+
+  document.getElementById('taskName').value = '';
+  document.getElementById('taskTime').value = '';
+}
+
+function deleteTask(index) {
+  tasks.splice(index,1);
+  saveTasks();
+  renderList();
+}
+
+function markDone(index){
+  tasks[index].alerted = true;
+  renderList();
+}
+
+function renderList() {
+  const taskList = document.getElementById('taskList');
+  taskList.innerHTML = '';
+  tasks.forEach((task, index) => {
+    const div = document.createElement('div');
+    div.classList.add('task-card');
+    if(task.alerted) div.classList.add('highlight');
+
+    div.innerHTML = `
+      <div class="task-info">${task.name} <span class="task-time">${task.time}</span></div>
+      <div class="task-actions">
+        <button onclick="markDone(${index})">✔️ Done</button>
+        <button onclick="deleteTask(${index})">❌ Delete</button>
+      </div>
+    `;
+    taskList.appendChild(div);
+  });
+}
+
+function checkTaskTime() {
+  const now = new Date();
+  const hours = now.getHours().toString().padStart(2,"0");
+  const minutes = now.getMinutes().toString().padStart(2,"0");
+  const currentTime = `${hours}:${minutes}`;
+
+  let nextTask = null;
+  let minDiff = 24*60;
+
+  tasks.forEach((task, index) => {
+    const [h,m] = task.time.split(':').map(Number);
+    const taskMinutes = h*60 + m;
+    const nowMinutes = hours*60 + minutes;
+
+    // Trigger alert
+    if(taskMinutes === nowMinutes && !task.alerted){
+      alarmSound.play();
+      const msg = new SpeechSynthesisUtterance(`समय हो गया है, ${task.name} करने का`);
+      msg.lang = 'hi-IN';
+      window.speechSynthesis.speak(msg);
+
+      showNotification(`समय हो गया है, ${task.name} करना है`);
+      task.alerted = true;
     }
 
-    function addTask() {
-      const name = document.getElementById('taskName').value.trim();
-      const time = document.getElementById('taskTime').value;
+    if(taskMinutes !== nowMinutes) task.alerted = false;
 
-      if (!name || !time) {
-        alert("Please enter task name and time!");
-        return;
-      }
+    // Find next upcoming task
+    const diff = taskMinutes - nowMinutes;
+    if(diff>0 && diff<minDiff){ minDiff = diff; nextTask = task; }
+  });
 
-      tasks.push({ name, time, alerted: false });
-      renderTable();
+  const upcomingDiv = document.getElementById('upcomingReminder');
+  upcomingDiv.textContent = nextTask ? `Next: ${nextTask.name} at ${nextTask.time}` : 'No upcoming task';
+}
 
-      document.getElementById('taskName').value = '';
-      document.getElementById('taskTime').value = '';
-    }
+function toggleDarkMode() {
+  document.body.classList.toggle('dark');
+}
 
-    function markDone(index) {
-      const row = document.getElementById(`task-${index}`);
-      row.cells[2].innerHTML = "✔️ Done";
-      row.classList.remove('highlight');
-      tasks[index].alerted = true;
-    }
+function showNotification(msg){
+  const notif = document.getElementById('notification');
+  notif.textContent = msg;
+  notif.style.display = 'block';
+  setTimeout(()=>{ notif.style.display='none'; }, 5000);
+}
 
-    function checkTaskTime() {
-      const now = new Date();
-      const hours = now.getHours().toString().padStart(2, "0");
-      const minutes = now.getMinutes().toString().padStart(2, "0");
-      const currentTime = `${hours}:${minutes}`;
+renderList();
+checkTaskTime();
+setInterval(checkTaskTime, 10000);
+</script>
 
-      tasks.forEach((task, index) => {
-        const row = document.getElementById(`task-${index}`);
-
-        if (task.time === currentTime && !task.alerted) {
-          // Highlight row
-          row.classList.add('highlight');
-
-          // Play alarm
-          alarmSound.play();
-
-          // Hindi voice reminder
-          const msg = new SpeechSynthesisUtterance(`समय हो गया है, ${task.name} करने का`);
-          msg.lang = 'hi-IN';
-          window.speechSynthesis.speak(msg);
-
-          task.alerted = true;
-        }
-
-        if (task.time !== currentTime) {
-          row.classList.remove('highlight');
-          task.alerted = false;
-        }
-      });
-    }
-
-    setInterval(checkTaskTime, 10000); // Check every 10 seconds
-  </script>
 </body>
 </html>
