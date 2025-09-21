@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Health Tracker | ElderlyCare</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+  body { margin:0; font-family:'Poppins',sans-serif; background:#f3f6fc; color:#333; }
+  .header { background:#2563eb; color:#fff; padding:15px 20px; display:flex; justify-content:space-between; align-items:center;}
+  .header h2 { margin:0; font-weight:600; font-size:20px; }
+  .back-btn { background:#ffcc00; padding:6px 14px; border-radius:8px; text-decoration:none; font-size:14px; font-weight:600; color:#000; transition: all 0.3s;}
+  .back-btn:hover { background:#ffb700; }
+
+  /* Health Cards Grid */
+  .health-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:20px; padding:25px 20px; max-width:1200px; margin:0 auto; }
+  .health-card { background:#fff; padding:20px; border-radius:16px; box-shadow:0 8px 24px rgba(0,0,0,0.1); display:flex; flex-direction:column; align-items:center; transition:transform 0.3s, box-shadow 0.3s; }
+  .health-card:hover { transform:translateY(-5px); box-shadow:0 12px 28px rgba(0,0,0,0.15);}
+  .metric-icon { font-size:40px; margin-bottom:15px;}
+  .metric-title { font-weight:600; font-size:18px; margin-bottom:10px; color:#1e3a8a; text-align:center;}
+  .metric-value { font-size:24px; font-weight:600; margin-bottom:10px; color:#2563eb;}
+  .progress-container { width:100%; background:#e5e7eb; height:10px; border-radius:10px; overflow:hidden; margin-bottom:15px;}
+  .progress-bar { height:100%; width:0%; border-radius:10px; transition:width 0.6s ease; }
+  .card-btn { background:#2563eb; color:white; padding:10px 16px; border-radius:10px; border:none; font-weight:600; cursor:pointer; transition:transform 0.2s, opacity 0.3s; }
+  .card-btn:hover { transform:scale(1.05); opacity:0.9; }
+
+  /* Charts */
+  .chart-container { max-width:900px; margin:40px auto; background:#fff; padding:20px; border-radius:16px; box-shadow:0 8px 24px rgba(0,0,0,0.1);}
+  .chart-container h3 { color:#1e3a8a; font-weight:600; margin-bottom:20px; text-align:center;}
+
+  /* Floating Add Button */
+  .add-btn { position:fixed; bottom:30px; right:30px; background:#22c55e; color:white; border:none; padding:15px 20px; border-radius:50px; font-size:18px; cursor:pointer; box-shadow:0 6px 15px rgba(0,0,0,0.2); transition:all 0.3s;}
+  .add-btn:hover { background:#16a34a; transform:scale(1.1); }
+
+  /* Modal */
+  .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); justify-content:center; align-items:center; z-index:1000;}
+  .modal-content { background:#fff; padding:20px 30px; border-radius:16px; width:90%; max-width:400px; text-align:center; }
+  .modal-content h3 { margin-bottom:15px; color:#1e3a8a;}
+  .modal-content input { width:80%; padding:10px; margin:10px 0; border-radius:8px; border:1px solid #ccc; font-size:16px;}
+  .modal-content button { padding:10px 16px; border:none; border-radius:10px; background:#2563eb; color:#fff; font-weight:600; cursor:pointer; transition:all 0.3s;}
+  .modal-content button:hover { background:#1d4ed8; }
+
+</style>
+</head>
+<body>
+
+<header class="header">
+  <h2>❤️ Health Tracker</h2>
+  <a href="../index.html" class="back-btn">⬅ Back</a>
+</header>
+
+<section class="health-grid">
+  <div class="health-card">
+    <div class="metric-icon">❤️</div>
+    <div class="metric-title">Heart Rate</div>
+    <div class="metric-value" id="heartRate">72 bpm</div>
+    <div class="progress-container"><div class="progress-bar" id="heartRateBar"></div></div>
+    <button class="card-btn">View History</button>
+  </div>
+  <div class="health-card">
+    <div class="metric-icon">👣</div>
+    <div class="metric-title">Steps</div>
+    <div class="metric-value" id="steps">4500</div>
+    <div class="progress-container"><div class="progress-bar" id="stepsBar"></div></div>
+    <button class="card-btn">View History</button>
+  </div>
+  <div class="health-card">
+    <div class="metric-icon">🛌</div>
+    <div class="metric-title">Sleep</div>
+    <div class="metric-value" id="sleep">6.5 hrs</div>
+    <div class="progress-container"><div class="progress-bar" id="sleepBar"></div></div>
+    <button class="card-btn">View History</button>
+  </div>
+  <div class="health-card">
+    <div class="metric-icon">💉</div>
+    <div class="metric-title">Blood Pressure</div>
+    <div class="metric-value" id="bp">120/80 mmHg</div>
+    <div class="progress-container"><div class="progress-bar" id="bpBar"></div></div>
+    <button class="card-btn">View History</button>
+  </div>
+</section>
+
+<!-- Charts -->
+<section class="chart-container">
+  <h3>Weekly Health Trends</h3>
+  <canvas id="healthChart"></canvas>
+</section>
+
+<!-- Floating Add Data Button -->
+<button class="add-btn" id="openModal">➕ Add Data</button>
+
+<!-- Modal -->
+<div class="modal" id="dataModal">
+  <div class="modal-content">
+    <h3>Add Health Data</h3>
+    <input type="number" id="inputHeart" placeholder="Heart Rate (bpm)">
+    <input type="number" id="inputSteps" placeholder="Steps">
+    <input type="number" id="inputSleep" placeholder="Sleep (hrs)">
+    <input type="text" id="inputBP" placeholder="Blood Pressure">
+    <br>
+    <button id="saveData">Save</button>
+  </div>
+</div>
+
+<script>
+  // Initial progress
+  const progressData = { heartRateBar: 72, stepsBar: 45, sleepBar: 65, bpBar: 80 };
+  for(const id in progressData){ document.getElementById(id).style.width = progressData[id] + '%'; }
+
+  // Modal logic
+  const modal = document.getElementById('dataModal');
+  document.getElementById('openModal').addEventListener('click',()=>{ modal.style.display='flex'; });
+  window.addEventListener('click', e=>{ if(e.target==modal) modal.style.display='none'; });
+
+  document.getElementById('saveData').addEventListener('click',()=>{
+    const heart = document.getElementById('inputHeart').value || 72;
+    const steps = document.getElementById('inputSteps').value || 4500;
+    const sleep = document.getElementById('inputSleep').value || 6.5;
+    const bp = document.getElementById('inputBP').value || "120/80";
+
+    document.getElementById('heartRate').innerText = heart + " bpm";
+    document.getElementById('steps').innerText = steps;
+    document.getElementById('sleep').innerText = sleep + " hrs";
+    document.getElementById('bp').innerText = bp;
+
+    document.getElementById('heartRateBar').style.width = Math.min(heart,180)/180*100 + '%';
+    document.getElementById('stepsBar').style.width = Math.min(steps,10000)/10000*100 + '%';
+    document.getElementById('sleepBar').style.width = Math.min(sleep,10)/10*100 + '%';
+    document.getElementById('bpBar').style.width = 80 + '%';
+
+    modal.style.display='none';
+  });
+
+  // Chart.js example
+  const ctx = document.getElementById('healthChart').getContext('2d');
+  const healthChart = new Chart(ctx,{
+    type:'line',
+    data:{
+      labels:['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],
+      datasets:[
+        { label:'Heart Rate', data:[72,75,70,74,73,71,72], borderColor:'#ef4444', fill:false, tension:0.3 },
+        { label:'Steps', data:[4000,4500,5000,6000,7000,6500,4800], borderColor:'#10b981', fill:false, tension:0.3 },
+        { label:'Sleep (hrs)', data:[6,6.5,7,6.8,7,6.5,6.7], borderColor:'#3b82f6', fill:false, tension:0.3 }
+      ]
+    },
+    options:{ responsive:true, plugins:{ legend:{ position:'top' } }, scales:{ y:{ beginAtZero:true } } }
+  });
+</script>
+
+</body>
+</html>
