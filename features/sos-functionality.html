@@ -1,112 +1,205 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SOS Alert</title>
-  <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      margin: 0;
-      background: #f0f9ff;
-      color: #333;
-      text-align: center;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SOS Alert</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #0284c7;
+    --danger: #dc2626;
+    --bg: #f0f9ff;
+    --card-bg: #ffffff;
+    --text-color: #333;
+  }
 
-    header {
-      background: #0284c7;
-      color: white;
-      padding: 25px 0;
-      font-size: 2rem;
-      text-align: center;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-    }
+  body {
+    margin: 0;
+    font-family: 'Roboto', sans-serif;
+    background: var(--bg);
+    color: var(--text-color);
+    transition: background 0.3s, color 0.3s;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    align-items: center;
+  }
 
-    .container {
-      margin: 50px auto;
-      max-width: 400px;
-      background: white;
-      padding: 30px;
-      border-radius: 20px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-    }
+  body.dark {
+    --bg: #1e293b;
+    --card-bg: #334155;
+    --text-color: #f1f5f9;
+  }
 
-    #sosButton {
-      background: red;
-      color: white;
-      font-size: 2rem;
-      padding: 30px;
-      border: none;
-      border-radius: 50%;
-      width: 150px;
-      height: 150px;
-      cursor: pointer;
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
+  header {
+    background: var(--primary);
+    color: white;
+    width: 100%;
+    padding: 20px;
+    font-size: 1.8rem;
+    font-weight: 700;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
 
-    #sosButton:hover {
-      transform: scale(1.1);
-      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-    }
+  header button {
+    background: white;
+    color: var(--primary);
+    border: none;
+    padding: 6px 12px;
+    border-radius: 15px;
+    cursor: pointer;
+    font-weight: 600;
+  }
 
-    #status {
-      margin-top: 20px;
-      font-size: 1.2rem;
-      color: #0284c7;
-    }
-  </style>
+  header button:hover {
+    background: #e0f2fe;
+  }
+
+  .container {
+    margin-top: 50px;
+    max-width: 400px;
+    background: var(--card-bg);
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    text-align: center;
+  }
+
+  #sosButton {
+    background: var(--danger);
+    color: white;
+    font-size: 2rem;
+    padding: 30px;
+    border: none;
+    border-radius: 50%;
+    width: 150px;
+    height: 150px;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    animation: pulse 2s infinite;
+  }
+
+  #sosButton:hover {
+    transform: scale(1.1);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+  }
+
+  @keyframes pulse {
+    0% { transform: scale(1); box-shadow: 0 0 0 rgba(220,38,38,0.7);}
+    50% { transform: scale(1.05); box-shadow: 0 0 20px rgba(220,38,38,0.7);}
+    100% { transform: scale(1); box-shadow: 0 0 0 rgba(220,38,38,0.7);}
+  }
+
+  #status {
+    margin-top: 20px;
+    font-size: 1.2rem;
+    color: var(--primary);
+    min-height: 50px;
+    transition: all 0.3s ease;
+  }
+
+  a {
+    color: var(--danger);
+    font-weight: bold;
+    text-decoration: none;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+</style>
 </head>
 <body>
-  <header>SOS Alert</header>
 
-  <div class="container">
-    <p>Press the SOS button in case of emergency.</p>
-    <button id="sosButton" onclick="triggerSOS()">SOS</button>
-    <p id="status">Last SOS: None</p>
-  </div>
+<header>
+  SOS Alert
+  <button onclick="toggleDarkMode()">🌙</button>
+</header>
 
-  <script>
-    const sosButton = document.getElementById('sosButton');
-    const statusText = document.getElementById('status');
+<div class="container">
+  <p>Press the SOS button in case of emergency.</p>
+  <button id="sosButton" onclick="prepareSOS()">SOS</button>
+  <p id="status">Last SOS: None</p>
+</div>
 
-    function triggerSOS() {
-      const confirmSOS = confirm("Are you sure you want to send an SOS alert?");
-      if (!confirmSOS) return;
+<script>
+let sosButton = document.getElementById('sosButton');
+let statusText = document.getElementById('status');
+let sosCountdown = null;
 
-      // Play alarm sound
-      const alarm = new Audio('https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg');
-      alarm.play();
+function toggleDarkMode() {
+  document.body.classList.toggle('dark');
+}
 
-      // Voice alert in Hindi
+// Step 1: countdown before sending SOS
+function prepareSOS() {
+  let countdown = 5; // seconds
+  statusText.textContent = `Sending SOS in ${countdown} seconds... Press again to cancel.`;
+  
+  if(sosCountdown) {
+    clearInterval(sosCountdown);
+    sosCountdown = null;
+    statusText.textContent = 'SOS cancelled.';
+    return;
+  }
+
+  sosCountdown = setInterval(() => {
+    countdown--;
+    if(countdown > 0) {
+      statusText.textContent = `Sending SOS in ${countdown} seconds... Press again to cancel.`;
+    } else {
+      clearInterval(sosCountdown);
+      sosCountdown = null;
+      triggerSOS();
+    }
+  }, 1000);
+}
+
+// Step 2: actual SOS alert
+function triggerSOS() {
+  // Play alarm
+  const alarm = new Audio('https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg');
+  alarm.play();
+
+  // Voice alert in Hindi repeated 3 times
+  for(let i=0;i<3;i++){
+    setTimeout(()=>{
       const msg = new SpeechSynthesisUtterance("आपातकालीन स्थिति! तुरंत सहायता की आवश्यकता है!");
       msg.lang = 'hi-IN';
       window.speechSynthesis.speak(msg);
+    }, i*2000);
+  }
 
-      // Get location
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-          (position) => {
-            const latitude = position.coords.latitude.toFixed(6);
-            const longitude = position.coords.longitude.toFixed(6);
-            const locationMsg = `Location: Latitude ${latitude}, Longitude ${longitude}`;
-            console.log(locationMsg);
-
-            // Update status
-            const now = new Date();
-            statusText.textContent = `Last SOS: Sent at ${now.toLocaleTimeString()} | ${locationMsg}`;
-          },
-          (error) => {
-            console.error(error);
-            const now = new Date();
-            statusText.textContent = `Last SOS: Sent at ${now.toLocaleTimeString()} | Location not available`;
-          }
-        );
-      } else {
-        alert("Geolocation not supported by your browser.");
+  // Get location
+  if(navigator.geolocation){
+    navigator.geolocation.getCurrentPosition(
+      (position)=>{
+        const lat = position.coords.latitude.toFixed(6);
+        const lon = position.coords.longitude.toFixed(6);
+        const locationLink = `https://www.google.com/maps?q=${lat},${lon}`;
+        const now = new Date();
+        statusText.innerHTML = `Last SOS: Sent at ${now.toLocaleTimeString()}<br>
+                                <a href="${locationLink}" target="_blank">View Location</a>`;
+        console.log(`Latitude: ${lat}, Longitude: ${lon}`);
+      },
+      (error)=>{
+        const now = new Date();
+        statusText.textContent = `Last SOS: Sent at ${now.toLocaleTimeString()} | Location not available`;
+        console.error(error);
       }
+    );
+  } else {
+    alert("Geolocation not supported by your browser.");
+  }
 
-      // Placeholder: Here you can integrate SMS/WhatsApp/Email API to notify caregivers
-    }
-  </script>
+  // TODO: Integrate SMS/Email/WhatsApp API to notify caregivers
+}
+</script>
+
 </body>
 </html>
