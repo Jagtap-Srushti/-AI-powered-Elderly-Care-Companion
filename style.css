@@ -1,4 +1,8 @@
 /* Global */
+* {
+  transition: all 0.3s ease-in-out;
+}
+
 body {
   font-family: 'Poppins', sans-serif;
   margin: 0;
@@ -10,6 +14,7 @@ button { cursor: pointer; }
 
 /* Navbar */
 .navbar {
+  background: linear-gradient(135deg, #2563eb, #1e40af);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -24,6 +29,7 @@ button { cursor: pointer; }
   font-size: 28px; 
   font-weight: bold; 
   color: #fff; 
+  cursor: pointer;
 }
 .nav-links { 
   list-style: none; 
@@ -34,18 +40,36 @@ button { cursor: pointer; }
   font-size: 20px; 
   font-weight: 600; 
   color: #fff; 
-  transition: color 0.3s; 
+  text-decoration: none;
+  transition: color 0.3s ease; 
 
 }
 .nav-links a:hover { 
   color: #ffcc00; 
+  text-decoration: underline;
+  transition: color 0.3s, text-decoration 0.3s;
 }
+
 .nav-btn { 
-  background: #ffcc00; 
-  padding: 10px 20px; 
-  font-size: 18px; 
-  border-radius: 8px; 
+  background: #facc15;
+  color: #1e3a8a;
+  padding: 0.6rem 1.4rem;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  transition: all 0.3s ease;
 }
+.nav-btn:hover, 
+.hero-text .btn:hover {
+  background: #fbbf24;
+  transform: scale(1.05);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+  transition: all 0.3s ease;
+}
+
+
 
 /* Hero */
 .hero { 
@@ -54,11 +78,14 @@ button { cursor: pointer; }
   justify-content: space-between; 
   align-items: center; 
   padding: 3rem 5%; 
-  background: linear-gradient(135deg, #e0f2fe, #f8fafc); 
+  background: linear-gradient(135deg, #eff6ff, #dbeafe); 
+  animation: fadeIn 1s ease-in;
 }
 .hero-text { 
   flex: 1; 
-  min-width: 300px; }
+  min-width: 50%; 
+}
+
 .hero-text h2 { 
   font-size: 2.2rem; 
   color: #1e3a8a; 
@@ -100,7 +127,8 @@ button { cursor: pointer; }
 
 /* Features */
 .features { 
-  text-align: center; 
+  text-align: center;
+  background: #f8fafc; 
   padding: 3rem 2rem; 
 }
 .features h3 { 
@@ -115,23 +143,37 @@ button { cursor: pointer; }
 }
 
 .feature-card {
-  background: #f8fafc;
+  background: linear-gradient(135deg, #ffffff, #f0f9ff);
   padding: 1.8rem;
   border-radius: 16px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  transition: transform 0.3s, box-shadow 0.3s;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+  transition: transform 0.3s, box-shadow 0.3s ease;
+  animation: fadeInUp 0.6s ease both;
   cursor: pointer;
 }
 .feature-card:hover { 
-  transform: translateY(-6px); 
-  box-shadow: 0 8px 20px rgba(0,0,0,0.15); 
+  transform: translateY(-8px) scale(1.03);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  background: #eef6ff;
+  transition: all 0.3s ease;
 }
 .feature-card img { 
   height: 160px; 
   width: auto; 
   margin-bottom: 1rem; 
   padding: 12px; 
-  border-radius: 50%; 
+  border-radius: 50%; transition: transform 0.4s ease, filter 0.3s ease;
+}
+
+.feature-card img, 
+.hero-image img {
+  transition: transform 0.4s ease, filter 0.3s ease;
+}
+
+.feature-card img:hover, 
+.hero-image img:hover {
+  transform: scale(1.05);
+  filter: brightness(1.05);
 }
 .feature-card h4 { 
   font-size: 1.3rem; 
@@ -156,15 +198,24 @@ button { cursor: pointer; }
   justify-items: center; 
 }
 .testimonial-card { 
-  background: #fff; 
+  background: linear-gradient(135deg, #ffffff, #f3faff);
   padding: 2rem 1.5rem; 
   border-radius: 12px; 
   box-shadow: 0 4px 12px rgba(0,0,0,0.1); 
   transition: transform 0.3s; 
 }
 .testimonial-card:hover { 
-  transform: translateY(-5px); 
+  transform: translateY(-8px);
+  box-shadow: 0 8px 18px rgba(0,0,0,0.15);
+  transition: all 0.3s ease; 
 }
+
+.feature-card:active,
+.testimonial-card:active {
+  transform: scale(0.97);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
 
 /* Footer */
 .footer { 
@@ -173,6 +224,19 @@ button { cursor: pointer; }
   text-align: center; 
   padding: 1.5rem; 
 }
+.footer a:hover {
+  color: #ffcc00;
+  transition: color 0.3s ease;
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.feature-card, .testimonial-card {
+  animation: fadeInUp 0.6s ease both;
+}
+
 
 /* Responsive */
 @media(max-width:768px){ 
