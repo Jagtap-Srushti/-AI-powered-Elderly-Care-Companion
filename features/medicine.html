@@ -1,174 +1,298 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Audio Medicine Reminder</title>
-  <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      margin: 0;
-      background: #f0f9ff;
-      color: #333;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Audio Medicine Reminder</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #0284c7;
+    --secondary: #16a34a;
+    --bg: #f0f9ff;
+    --card-bg: #ffffff;
+    --text-color: #333;
+    --accent: #2563eb;
+  }
 
-    header {
-      background: #0284c7;
-      color: white;
-      padding: 25px 0;
-      font-size: 2rem;
-      text-align: center;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-    }
+  body {
+    margin: 0;
+    font-family: 'Roboto', sans-serif;
+    background: var(--bg);
+    color: var(--text-color);
+    transition: background 0.3s, color 0.3s;
+  }
 
-    .container {
-      max-width: 500px;
-      margin: 40px auto;
-      padding: 30px 20px;
-      background: white;
-      border-radius: 15px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-    }
+  body.dark {
+    --bg: #1e293b;
+    --card-bg: #334155;
+    --text-color: #f1f5f9;
+  }
 
-    h2 {
-      text-align: center;
-      color: #0284c7;
-      margin-bottom: 25px;
-      font-size: 1.7rem;
-    }
+  header {
+    position: sticky;
+    top: 0;
+    background: var(--primary);
+    color: white;
+    padding: 20px;
+    text-align: center;
+    font-size: 1.8rem;
+    font-weight: 700;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
 
-    .form-group {
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-      margin-bottom: 20px;
-    }
+  header button {
+    background: white;
+    color: var(--primary);
+    border: none;
+    padding: 8px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: 600;
+  }
 
-    input[type="text"], input[type="time"] {
-      padding: 12px 15px;
-      font-size: 1rem;
-      border-radius: 10px;
-      border: 1px solid #ccc;
-      box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
-      transition: border 0.3s;
-    }
+  header button:hover {
+    background: #e0f2fe;
+  }
 
-    input[type="text"]:focus, input[type="time"]:focus {
-      border: 1px solid #0284c7;
-      outline: none;
-    }
+  .container {
+    max-width: 500px;
+    margin: 30px auto;
+    padding: 20px;
+  }
 
-    button {
-      padding: 12px;
-      font-size: 1rem;
-      border-radius: 10px;
-      border: none;
-      background: #16a34a;
-      color: white;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    }
+  h2 {
+    text-align: center;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 25px;
+  }
 
-    button:hover {
-      background: #15803d;
-      transform: translateY(-2px);
-      box-shadow: 0 6px 12px rgba(0,0,0,0.15);
-    }
+  .add-medicine {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
 
-    #medList {
-      margin-top: 20px;
-      padding: 15px;
-      background: #f0f9ff;
-      border-radius: 12px;
-      box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
-      max-height: 300px;
-      overflow-y: auto;
-    }
+  .add-medicine input[type="text"], 
+  .add-medicine input[type="time"] {
+    flex: 1;
+    padding: 12px 15px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+    box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
+    transition: border 0.3s;
+  }
 
-    #medList p {
-      padding: 10px;
-      border-bottom: 1px solid #ddd;
-      font-size: 1.1rem;
-      margin: 0;
-    }
+  .add-medicine input:focus {
+    border: 1px solid var(--primary);
+    outline: none;
+  }
 
-    #medList p:last-child {
-      border-bottom: none;
-    }
-  </style>
+  .add-medicine button {
+    background: var(--secondary);
+    border: none;
+    padding: 12px 18px;
+    border-radius: 10px;
+    color: white;
+    cursor: pointer;
+    font-weight: 600;
+    transition: 0.3s;
+  }
+
+  .add-medicine button:hover {
+    background: #15803d;
+    transform: translateY(-2px);
+  }
+
+  #medList {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .med-card {
+    background: var(--card-bg);
+    padding: 15px 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: transform 0.3s;
+  }
+
+  .med-card:hover {
+    transform: translateY(-3px);
+  }
+
+  .med-info {
+    font-size: 1.1rem;
+    font-weight: 500;
+  }
+
+  .med-time {
+    font-weight: 700;
+    color: var(--accent);
+  }
+
+  .med-actions button {
+    background: #dc2626;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 8px;
+    color: white;
+    cursor: pointer;
+    font-weight: 600;
+    transition: 0.3s;
+  }
+
+  .med-actions button:hover {
+    background: #b91c1c;
+  }
+
+  .upcoming {
+    text-align: center;
+    font-weight: 600;
+    color: var(--accent);
+    margin-bottom: 20px;
+  }
+
+  .notification {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: var(--secondary);
+    color: white;
+    padding: 12px 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    display: none;
+    font-weight: 600;
+  }
+</style>
 </head>
 <body>
-  <header>Audio Medicine Reminder</header>
 
-  <div class="container">
-    <h2>Set Your Medicines</h2>
+<header>
+  Audio Medicine Reminder
+  <button onclick="toggleDarkMode()">🌙</button>
+</header>
 
-    <div class="form-group">
-      <input type="text" id="medName" placeholder="Medicine name">
-      <input type="time" id="medTime">
-      <button onclick="addMedicine()">Add Medicine</button>
-    </div>
+<div class="container">
+  <h2>Manage Your Medicines</h2>
 
-    <div id="medList"></div>
+  <div class="add-medicine">
+    <input type="text" id="medName" placeholder="Medicine name">
+    <input type="time" id="medTime">
+    <button onclick="addMedicine()">Add</button>
   </div>
 
-  <script>
-    let medicines = [];
-    const alarmSound = new Audio('https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg');
+  <div class="upcoming" id="upcomingReminder"></div>
 
-    function addMedicine() {
-      const name = document.getElementById('medName').value.trim();
-      const time = document.getElementById('medTime').value;
+  <div id="medList"></div>
+</div>
 
-      if (!name || !time) {
-        alert("कृपया दवा का नाम और समय डालें!");
-        return;
-      }
+<div class="notification" id="notification"></div>
 
-      medicines.push({ name, time, alerted: false });
-      renderList();
+<script>
+let medicines = JSON.parse(localStorage.getItem('medicines')) || [];
+const alarmSound = new Audio('https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg');
 
-      document.getElementById('medName').value = '';
-      document.getElementById('medTime').value = '';
+function saveMedicines() {
+  localStorage.setItem('medicines', JSON.stringify(medicines));
+}
+
+function addMedicine() {
+  const name = document.getElementById('medName').value.trim();
+  const time = document.getElementById('medTime').value;
+
+  if (!name || !time) {
+    alert("कृपया दवा का नाम और समय डालें!");
+    return;
+  }
+
+  medicines.push({ name, time, alerted: false });
+  saveMedicines();
+  renderList();
+
+  document.getElementById('medName').value = '';
+  document.getElementById('medTime').value = '';
+}
+
+function deleteMedicine(index) {
+  medicines.splice(index, 1);
+  saveMedicines();
+  renderList();
+}
+
+function renderList() {
+  const medList = document.getElementById('medList');
+  medList.innerHTML = '';
+  medicines.forEach((med, index) => {
+    const div = document.createElement('div');
+    div.classList.add('med-card');
+    div.innerHTML = `
+      <div class="med-info">${med.name} <span class="med-time">${med.time}</span></div>
+      <div class="med-actions"><button onclick="deleteMedicine(${index})">Delete</button></div>
+    `;
+    medList.appendChild(div);
+  });
+}
+
+function checkMedicineTime() {
+  const now = new Date();
+  const hours = now.getHours().toString().padStart(2, "0");
+  const minutes = now.getMinutes().toString().padStart(2, "0");
+  const currentTime = `${hours}:${minutes}`;
+
+  let nextMed = null;
+  let minDiff = 24*60;
+
+  medicines.forEach(med => {
+    if (med.time === currentTime && !med.alerted) {
+      alarmSound.play();
+      const msg = new SpeechSynthesisUtterance(`समय हो गया है, आपकी दवा लेने का: ${med.name}`);
+      msg.lang = 'hi-IN';
+      window.speechSynthesis.speak(msg);
+
+      showNotification(`समय हो गया है, दवा लें: ${med.name}`);
+      med.alerted = true;
     }
 
-    function renderList() {
-      const medList = document.getElementById('medList');
-      medList.innerHTML = '';
-      medicines.forEach((med, index) => {
-        const p = document.createElement('p');
-        p.textContent = `${index + 1}. ${med.name} - ${med.time}`;
-        medList.appendChild(p);
-      });
+    if (med.time !== currentTime) med.alerted = false;
+
+    const [h, m] = med.time.split(':').map(Number);
+    const diff = (h*60 + m) - (hours*60 + minutes);
+    if(diff > 0 && diff < minDiff){
+      minDiff = diff;
+      nextMed = med;
     }
+  });
 
-    function checkMedicineTime() {
-      const now = new Date();
-      const hours = now.getHours().toString().padStart(2, "0");
-      const minutes = now.getMinutes().toString().padStart(2, "0");
-      const currentTime = `${hours}:${minutes}`;
+  const upcomingDiv = document.getElementById('upcomingReminder');
+  upcomingDiv.textContent = nextMed ? `Next: ${nextMed.name} at ${nextMed.time}` : 'No upcoming medicine';
+}
 
-      medicines.forEach(med => {
-        if (med.time === currentTime && !med.alerted) {
-          // Play alarm
-          alarmSound.play();
+function toggleDarkMode() {
+  document.body.classList.toggle('dark');
+}
 
-          // Hindi voice reminder
-          const msg = new SpeechSynthesisUtterance(`समय हो गया है, आपकी दवा लेने का: ${med.name}`);
-          msg.lang = 'hi-IN';
-          window.speechSynthesis.speak(msg);
+function showNotification(msg) {
+  const notif = document.getElementById('notification');
+  notif.textContent = msg;
+  notif.style.display = 'block';
+  setTimeout(() => { notif.style.display = 'none'; }, 5000);
+}
 
-          med.alerted = true;
-        }
+renderList();
+checkMedicineTime();
+setInterval(checkMedicineTime, 10000);
+</script>
 
-        if (med.time !== currentTime) {
-          med.alerted = false;
-        }
-      });
-    }
-
-    setInterval(checkMedicineTime, 10000);
-  </script>
 </body>
 </html>
