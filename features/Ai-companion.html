@@ -1,195 +1,318 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AI Companion</title>
-  <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      margin: 0;
-      background: #f0f9ff;
-      color: #333;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Voice Assistant</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #0284c7;
+    --secondary: #16a34a;
+    --bg: #f0f9ff;
+    --chat-bg: #ffffff;
+    --user-msg: #16a34a;
+    --ai-msg: #0284c7;
+  }
 
-    header {
-      background: #0284c7;
-      color: white;
-      padding: 25px 0;
-      font-size: 2rem;
-      text-align: center;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-    }
+  body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    background: var(--bg);
+    transition: background 0.3s;
+  }
 
-    .container {
-      max-width: 700px;
-      margin: 40px auto;
-      padding: 20px;
-      background: white;
-      border-radius: 15px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-      display: flex;
-      flex-direction: column;
-      height: 80vh;
-    }
+  body.dark {
+    --bg: #1e293b;
+    --chat-bg: #334155;
+    --user-msg: #22c55e;
+    --ai-msg: #38bdf8;
+    color: #f1f5f9;
+  }
 
-    .chat-window {
-      flex: 1;
-      padding: 15px;
-      border: 1px solid #ccc;
-      border-radius: 10px;
-      overflow-y: auto;
-      margin-bottom: 15px;
-      background: #f9f9f9;
-    }
+  header {
+    background: var(--primary);
+    color: white;
+    padding: 20px;
+    text-align: center;
+    font-size: 1.8rem;
+    font-weight: 600;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
 
-    .chat-message {
-      margin: 10px 0;
-      padding: 12px 15px;
-      border-radius: 12px;
-      max-width: 75%;
-      font-size: 1.1rem;
-    }
+  header button {
+    background: white;
+    color: var(--primary);
+    border: none;
+    padding: 8px 15px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: 0.3s;
+  }
 
-    .user-msg {
-      background: #16a34a;
-      color: white;
-      align-self: flex-end;
-    }
+  header button:hover {
+    background: #e0f2fe;
+  }
 
-    .ai-msg {
-      background: #e0f2fe;
-      color: #0284c7;
-      align-self: flex-start;
-    }
+  .chat-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column-reverse;
+    padding: 15px;
+    overflow-y: auto;
+    background: linear-gradient(to top, #e0f7fa, #ffffff);
+    transition: background 0.3s;
+  }
 
-    .input-group {
-      display: flex;
-      gap: 10px;
-    }
+  body.dark .chat-container {
+    background: linear-gradient(to top, #1e293b, #334155);
+  }
 
-    .input-group input {
-      flex: 1;
-      padding: 12px 15px;
-      font-size: 1rem;
-      border-radius: 10px;
-      border: 1px solid #ccc;
-    }
+  .message {
+    max-width: 70%;
+    padding: 12px 15px;
+    border-radius: 20px;
+    margin: 8px 0;
+    display: flex;
+    align-items: center;
+    animation: slideUp 0.3s ease;
+    word-wrap: break-word;
+  }
 
-    .input-group button {
-      padding: 12px 20px;
-      font-size: 1rem;
-      border-radius: 10px;
-      border: none;
-      background: #0284c7;
-      color: white;
-      cursor: pointer;
-      transition: 0.3s;
-    }
+  .message.user {
+    align-self: flex-end;
+    background: var(--user-msg);
+    color: white;
+    border-bottom-right-radius: 0;
+  }
 
-    .input-group button:hover {
-      background: #0369a1;
-    }
+  .message.ai {
+    align-self: flex-start;
+    background: var(--chat-bg);
+    color: var(--ai-msg);
+    border: 1px solid var(--ai-msg);
+    border-bottom-left-radius: 0;
+  }
 
-    .preset-buttons {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 15px;
-      flex-wrap: wrap;
-    }
+  .message.ai::before {
+    content: "🤖";
+    margin-right: 8px;
+  }
 
-    .preset-buttons button {
-      background: #16a34a;
-      color: white;
-      padding: 10px 15px;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      font-size: 0.95rem;
-      transition: 0.3s;
-    }
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
 
-    .preset-buttons button:hover {
-      background: #15803d;
-    }
-  </style>
+  .input-area {
+    display: flex;
+    align-items: center;
+    padding: 10px 20px;
+    border-top: 1px solid #ccc;
+    background: var(--chat-bg);
+    transition: background 0.3s;
+  }
+
+  .input-area input {
+    flex: 1;
+    padding: 12px 15px;
+    border-radius: 25px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+    margin-right: 10px;
+  }
+
+  .input-area button {
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    border: none;
+    background: var(--primary);
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    transition: 0.3s;
+    position: relative;
+  }
+
+  .input-area button:hover {
+    background: #0369a1;
+  }
+
+  /* Listening animation */
+  .listening::after {
+    content: '';
+    position: absolute;
+    width: 70px;
+    height: 70px;
+    border: 3px solid rgba(255,255,255,0.5);
+    border-radius: 50%;
+    top: -7.5px;
+    left: -7.5px;
+    animation: pulse 1s infinite;
+  }
+
+  @keyframes pulse {
+    0% { transform: scale(0.8); opacity: 0.7; }
+    50% { transform: scale(1.2); opacity: 0.3; }
+    100% { transform: scale(0.8); opacity: 0.7; }
+  }
+
+  .preset-buttons {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 10px 0;
+  }
+
+  .preset-buttons button {
+    background: var(--user-msg);
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    transition: 0.3s;
+  }
+
+  .preset-buttons button:hover {
+    background: #15803d;
+  }
+
+  .typing-indicator {
+    font-style: italic;
+    color: #888;
+    align-self: flex-start;
+    margin: 5px 0;
+  }
+
+  body.dark .typing-indicator {
+    color: #ddd;
+  }
+</style>
 </head>
 <body>
-  <header>AI Companion</header>
 
-  <div class="container">
-    <div class="preset-buttons">
-      <button onclick="sendPreset('How am I feeling today?')">How am I feeling today?</button>
-      <button onclick="sendPreset('Tell me a joke')">Tell me a joke</button>
-      <button onclick="sendPreset('Relaxation exercise')">Relaxation exercise</button>
-      <button onclick="sendPreset('Give me health tips')">Give me health tips</button>
-    </div>
+<header>
+  AI Voice Assistant
+  <button onclick="toggleDarkMode()">🌙</button>
+</header>
 
-    <div class="chat-window" id="chatWindow"></div>
+<div class="preset-buttons">
+  <button onclick="sendPreset('How am I feeling today?')">How am I feeling today?</button>
+  <button onclick="sendPreset('Tell me a joke')">Tell me a joke</button>
+  <button onclick="sendPreset('Relaxation exercise')">Relaxation exercise</button>
+  <button onclick="sendPreset('Give me health tips')">Give me health tips</button>
+  <button onclick="clearChat()">Clear Chat</button>
+</div>
 
-    <div class="input-group">
-      <input type="text" id="userInput" placeholder="Type your message here">
-      <button onclick="sendMessage()">Send</button>
-    </div>
-  </div>
+<div class="chat-container" id="chatWindow"></div>
 
-  <script>
-    const chatWindow = document.getElementById('chatWindow');
+<div class="input-area">
+  <input type="text" id="userInput" placeholder="Type or speak your message...">
+  <button id="micBtn" onclick="startVoiceInput()">🎤</button>
+</div>
 
-    function addMessage(message, sender) {
-      const msgDiv = document.createElement('div');
-      msgDiv.classList.add('chat-message');
-      msgDiv.classList.add(sender === 'user' ? 'user-msg' : 'ai-msg');
-      msgDiv.textContent = message;
-      chatWindow.appendChild(msgDiv);
-      chatWindow.scrollTop = chatWindow.scrollHeight;
+<script>
+const chatWindow = document.getElementById('chatWindow');
+const userInput = document.getElementById('userInput');
+const micBtn = document.getElementById('micBtn');
 
-      // Voice output for AI messages in Hindi
-      if (sender === 'ai') {
-        const speech = new SpeechSynthesisUtterance(message);
-        speech.lang = 'hi-IN';
-        window.speechSynthesis.speak(speech);
-      }
-    }
+// Dark mode toggle
+function toggleDarkMode() {
+  document.body.classList.toggle('dark');
+}
 
-    function sendMessage() {
-      const input = document.getElementById('userInput');
-      const text = input.value.trim();
-      if (!text) return;
+// Speech recognition
+const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+recognition.lang = 'hi-IN';
+recognition.interimResults = false;
 
-      addMessage(text, 'user');
-      input.value = '';
+function startVoiceInput() {
+  micBtn.classList.add('listening');
+  recognition.start();
+}
 
-      // Simulate AI response
-      setTimeout(() => {
-        const aiResponse = generateAIResponse(text);
-        addMessage(aiResponse, 'ai');
-      }, 500);
-    }
+recognition.onresult = function(event) {
+  const voiceText = event.results[0][0].transcript;
+  userInput.value = voiceText;
+  sendMessage();
+  micBtn.classList.remove('listening');
+}
 
-    function sendPreset(text) {
-      addMessage(text, 'user');
-      setTimeout(() => {
-        const aiResponse = generateAIResponse(text);
-        addMessage(aiResponse, 'ai');
-      }, 500);
-    }
+recognition.onend = function() {
+  micBtn.classList.remove('listening');
+}
 
-    function generateAIResponse(userText) {
-      // Pre-defined simple AI responses
-      userText = userText.toLowerCase();
-      if (userText.includes('joke')) {
-        return 'एक मजेदार चुटकुला: बिल्लियाँ इंटरनेट क्यों पसंद करती हैं? क्योंकि उन्हें माउस मिल जाता है!';
-      } else if (userText.includes('relax')) {
-        return 'धीरे-धीरे गहरी साँस लें और आंखें बंद करें, 5 मिनट के लिए ध्यान लगाएँ।';
-      } else if (userText.includes('health')) {
-        return 'सुनिश्चित करें कि आप पर्याप्त पानी पिएँ और रोज़ाना हल्का व्यायाम करें।';
-      } else if (userText.includes('feeling')) {
-        return 'आज आपका मूड अच्छा दिख रहा है! मुस्कुराएँ और हल्की सैर करें।';
-      } else {
-        return 'मुझे समझ नहीं आया, कृपया पुनः प्रयास करें।';
-      }
-    }
-  </script>
+function addMessage(msg, sender) {
+  const div = document.createElement('div');
+  div.classList.add('message', sender);
+  div.textContent = msg;
+  chatWindow.prepend(div);
+  chatWindow.scrollTop = chatWindow.scrollHeight;
+
+  if(sender === 'ai') {
+    const speech = new SpeechSynthesisUtterance(msg);
+    speech.lang = 'hi-IN';
+    window.speechSynthesis.speak(speech);
+  }
+}
+
+function sendMessage() {
+  const text = userInput.value.trim();
+  if(!text) return;
+  addMessage(text, 'user');
+  userInput.value = '';
+
+  // Typing indicator
+  const typingDiv = document.createElement('div');
+  typingDiv.classList.add('typing-indicator');
+  typingDiv.textContent = 'AI is typing...';
+  chatWindow.prepend(typingDiv);
+
+  setTimeout(() => {
+    typingDiv.remove();
+    const response = generateAIResponse(text);
+    addMessage(response, 'ai');
+  }, 800);
+}
+
+function sendPreset(text) {
+  userInput.value = text;
+  sendMessage();
+}
+
+function clearChat() {
+  chatWindow.innerHTML = '';
+}
+
+function generateAIResponse(text) {
+  text = text.toLowerCase();
+  if(text.includes('joke')) return 'एक मजेदार चुटकुला: बिल्लियाँ इंटरनेट क्यों पसंद करती हैं? क्योंकि उन्हें माउस मिल जाता है!';
+  if(text.includes('relax')) return 'धीरे-धीरे गहरी साँस लें और आंखें बंद करें, 5 मिनट ध्यान लगाएँ।';
+  if(text.includes('health')) return 'सुनिश्चित करें कि आप पर्याप्त पानी पिएँ और हल्का व्यायाम करें।';
+  if(text.includes('feeling')) return 'आज आपका मूड अच्छा दिख रहा है! मुस्कुराएँ और हल्की सैर करें।';
+  return 'मुझे समझ नहीं आया, कृपया पुनः प्रयास करें।';
+}
+
+// Enter key support
+userInput.addEventListener('keypress', e => {
+  if(e.key === 'Enter') sendMessage();
+});
+</script>
+
 </body>
 </html>
