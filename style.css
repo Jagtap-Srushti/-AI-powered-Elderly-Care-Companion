@@ -187,3 +187,83 @@ button { cursor: pointer; }
     grid-template-columns: 1fr; 
   } 
  }
+
+ /* Responsive Design */
+
+/* 📱 Small screens (phones up to 480px) */
+@media (max-width: 480px) {
+  .navbar {
+    flex-direction: column;
+    padding: 10px 20px;
+  }
+  .logo {
+    font-size: 22px;
+    margin-bottom: 10px;
+  }
+  .nav-links {
+    flex-direction: column;
+    gap: 12px;
+  }
+  .hero {
+    flex-direction: column;
+    padding: 2rem 1rem;
+    text-align: center;
+  }
+  .hero-text h2 {
+    font-size: 1.6rem;
+  }
+  .hero-text p {
+    font-size: 1rem;
+  }
+  .hero-image img {
+    max-width: 90%;
+    margin-top: 20px;
+  }
+  .feature-card img {
+    height: 120px;
+  }
+  .feature-card h4 {
+    font-size: 1.1rem;
+  }
+  .testimonial-card {
+    padding: 1.5rem 1rem;
+  }
+}
+
+/* 📲 Medium screens (tablets: 481px–768px) */
+@media (min-width: 481px) and (max-width: 768px) {
+  .hero {
+    flex-direction: column;
+    text-align: center;
+  }
+  .hero-text h2 {
+    font-size: 2rem;
+  }
+  .hero-image img {
+    max-width: 75%;
+    margin-top: 20px;
+  }
+  .feature-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+  .testimonial-cards {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* 🖥️ Large screens (desktops: 1200px+) */
+@media (min-width: 1200px) {
+  .hero-text h2 {
+    font-size: 2.8rem;
+  }
+  .hero-text p {
+    font-size: 1.3rem;
+  }
+  .feature-card img {
+    height: 180px;
+  }
+  .feature-card h4 {
+    font-size: 1.4rem;
+  }
+}
